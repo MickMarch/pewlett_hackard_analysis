@@ -17,7 +17,7 @@ CREATE TABLE employees(
 	PRIMARY KEY (emp_no)
 );
 
-CREATE TABLE dept_managers(
+CREATE TABLE dept_manager(
 	dept_no VARCHAR(4) NOT NULL,
 	emp_no INT NOT NULL,
 	from_date DATE NOT NULL,
