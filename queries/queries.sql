@@ -134,3 +134,16 @@ FROM current_emp as ce
 		ON (ce.emp_no = de.emp_no)
 	INNER JOIN departments AS d
 		ON (de.dept_no = d.dept_no);
+		
+SELECT * FROM current_emp;
+SELECT * FROM dept_info;
+SELECT * FROM dept_retirement;
+SELECT * FROM departments;
+
+-- Sales Retirement
+SELECT * FROM dept_info
+WHERE dept_name = 'Sales';
+	
+-- Sales and Development Retirement
+SELECT * FROM dept_info
+WHERE dept_name IN ('Sales', 'Development');
