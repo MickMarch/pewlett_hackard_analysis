@@ -50,8 +50,56 @@ WHERE (de.to_date = '9999-01-01')
 					  AND '1965-12-31')
 ORDER BY e.emp_no;
 
+-- Query for ALL current employees and create table
+SELECT DISTINCT ON (e.emp_no)
+	   e.emp_no,
+	   e.first_name,
+	   e.last_name,
+	   de.to_date,
+	   d.dept_name,
+	   d.dept_no,
+	   t.title,
+	   s.salary
+INTO current_emp
+FROM employees AS e
+LEFT JOIN dept_emp AS de
+	ON e.emp_no = de.emp_no
+LEFT JOIN departments as d
+	ON de.dept_no = d.dept_no
+LEFT JOIN salaries as s
+	ON e.emp_no = s.emp_no
+LEFT JOIN titles as t
+	ON e.emp_no = t.emp_no
+WHERE de.to_date = '9999-01-01'
+	  AND t.to_date = '9999-01-01'
+ORDER BY e.emp_no;
 
-SELECT DISTINCT (title), COUNT(title) AS "Eligible Count"
-FROM mentorship_eligibility
-GROUP BY title
-ORDER BY "Eligible Count" DESC;
+-- Discover percentage of employees leaving against total current employees
+SELECT COUNT(ut.emp_no) AS "Retiring Employee Count",
+       COUNT(ce.emp_no) AS "Current Employee Count"
+FROM current_emp as ce
+LEFT JOIN unique_titles as ut
+ON ce.emp_no = ut.emp_no;
+
+
+
+-- Create table which shows how many people are retiring by department.
+SELECT ce.dept_name,
+	   COUNT(ce.emp_no) AS "Count of Retiring"
+INTO retire_by_dept
+FROM current_emp AS ce
+JOIN unique_titles as ut
+	ON ce.emp_no = ut.emp_no
+GROUP BY ce.dept_name
+ORDER BY COUNT(ce.emp_no) DESC;
+
+-- Create table which shows how many people are eligible 
+-- for the mentorship program by department.
+SELECT ce.dept_name,
+	   COUNT(ce.emp_no) AS "Count of Eligible Mentors"
+INTO mentorship_by_dept
+FROM current_emp AS ce
+JOIN mentorship_eligibility as me
+	ON ce.emp_no = me.emp_no
+GROUP BY ce.dept_name
+ORDER BY COUNT(ce.emp_no) DESC;
