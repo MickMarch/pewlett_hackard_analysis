@@ -49,3 +49,9 @@ WHERE (de.to_date = '9999-01-01')
 	AND (e.birth_date BETWEEN '1965-01-01'
 					  AND '1965-12-31')
 ORDER BY e.emp_no;
+
+
+SELECT DISTINCT (title), COUNT(title) AS "Eligible Count"
+FROM mentorship_eligibility
+GROUP BY title
+ORDER BY "Eligible Count" DESC;
